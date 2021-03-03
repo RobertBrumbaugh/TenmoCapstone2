@@ -6,10 +6,15 @@ import java.util.Set;
 
 public class User {
 
+
    private Long id;
+   
    private String username;
+   
    private String password;
+   
    private boolean activated;
+   
    private Set<Authority> authorities = new HashSet<>();
 
    public User() { }
