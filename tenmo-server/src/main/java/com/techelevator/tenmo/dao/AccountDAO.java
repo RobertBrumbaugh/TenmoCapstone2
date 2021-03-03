@@ -1,14 +1,14 @@
 package com.techelevator.tenmo.dao;
 
-import com.techelevator.tenmo.model.Accounts;
+import com.techelevator.tenmo.model.Account;
 
 public interface AccountDAO {
 	
 	double getBalance(int userId);
 	double addToBalance();
 	double subtractFromBalance();
-	Accounts searchByUserId(int userId);
-	Accounts searchByAccountId(int accountId);
+	Account searchByUserId(int userId);
+	Account searchByAccountId(int accountId);
 	
 
 }

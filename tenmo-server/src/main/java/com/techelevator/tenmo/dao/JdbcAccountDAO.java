@@ -1,28 +1,25 @@
 package com.techelevator.tenmo.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
 
-import com.techelevator.tenmo.model.Accounts;
+import com.techelevator.tenmo.model.Account;
 
+@Component
 public class JdbcAccountDAO implements AccountDAO {
+
 	
 	private JdbcTemplate jdbcTemplate;
 	public JdbcAccountDAO(JdbcTemplate jdbcTemplate) {
-	        this.jdbcTemplate = jdbcTemplate;
+	        this.jdbcTemplate = new JdbcTemplate();
 	    }
 
 	@Override
 	public double getBalance(int userId) {
 		String sql = "SELECT balance FROM accounts WHERE user_id = ?";
-		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+		double results = jdbcTemplate.queryForObject(sql, double.class, userId);
 		
-		Double balance = null;
-		
-		if(results.next()) {
-			balance = results.getDouble(userId);
-		}
-		return balance;
+		return results;
 	}
 
 	@Override
@@ -38,13 +35,13 @@ public class JdbcAccountDAO implements AccountDAO {
 	}
 
 	@Override
-	public Accounts searchByUserId(int userId) {
+	public Account searchByUserId(int userId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Accounts searchByAccountId(int accountId) {
+	public Account searchByAccountId(int accountId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

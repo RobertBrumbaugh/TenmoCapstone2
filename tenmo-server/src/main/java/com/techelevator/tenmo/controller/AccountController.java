@@ -17,14 +17,14 @@ public class AccountController {
 	private UserDAO userDAO;
 	private AccountDAO accountDAO;
 
-	public AccountController() {
-		this.userDAO = userDAO;
+	public AccountController(AccountDAO accountDAO) {
 		this.accountDAO = accountDAO;
 	}
 
-	@RequestMapping(path = "balance/{userId}", method = RequestMethod.GET)
-	public Double getBalance(@PathVariable int userId) {
-		Double balance = accountDAO.getBalance(userId);
+	@PreAuthorize("permitAll")
+	@RequestMapping(path = "/accounts/{id}/balance", method = RequestMethod.GET)
+	public Double getBalance(@PathVariable int id) {
+		Double balance = accountDAO.getBalance(id);
 		return balance;
 	}
 }
