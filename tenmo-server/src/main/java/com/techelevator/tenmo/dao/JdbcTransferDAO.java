@@ -18,14 +18,14 @@ public class JdbcTransferDAO implements TransferDAO {
 	    }
 	
 	private JdbcUserDAO jdbcUserDao;
+	private JdbcAccountDAO jdbcAccountDAO;
 
 	@Override
 	public List<Transfers> getTransfers(int userId) {
 		List<Transfers> list = new ArrayList<>();
-		String sql = "SELECT t.transfer_id, t.account_from, t.account_to, amount FROM transfers t " +
+		String sql = "SELECT t.transfer_id, t.account_from, t.account_to, t.amount FROM transfers t " +
 				"JOIN accounts a ON a.account_id = t.account_from " +
-				//"JOIN users u ON u.user_id = a.user_id " +
-				"WHERE a.user_id = ?";
+				"WHERE a.user_id = ?;";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
 		
 		while(results.next()) {
@@ -38,7 +38,6 @@ public class JdbcTransferDAO implements TransferDAO {
 
 	@Override
 	public Transfers getTransfersById(int transferId) {
-	//	Transfers transfer = new Transfers();
 		String sql = "SELECT * FROM transfers t WHERE t.transfer_id = ?";
 		Transfers results = jdbcTemplate.queryForObject(sql, Transfers.class, transferId);
 		return results;
@@ -47,13 +46,15 @@ public class JdbcTransferDAO implements TransferDAO {
 	@Override
 	public String sendTransfer(int accountFrom, int accountTo, double amount) {
 		
-		if(accountFrom == accountTo) {
-			System.out.println("You cannot send money to yourself!");
-		}
-		//String sql = "INSERT INTO transfers() +  "
+		String sql = "INSERT INTO transfers (account_from, account_to, amount) VALUES (?, ?, ?) ";
+		jdbcTemplate.update(sql, accountFrom, accountTo, amount);
 		
-		return null;
+		jdbcAccountDAO.addToBalance(accountTo, amount);
+		jdbcAccountDAO.subtractFromBalance(accountFrom, amount);
+		
+		return "successful";
 	}
+    
 
 	 private Transfers mapRowToTransfer(SqlRowSet results) {
 	        Transfers transfer = new Transfers();

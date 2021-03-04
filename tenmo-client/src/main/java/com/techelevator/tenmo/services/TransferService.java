@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpEntity;
@@ -21,16 +22,22 @@ public class TransferService {
         this.baseUrl = url;
     }
     
-    public User getUsers(){
-    	
-		return restTemplate.exchange(baseUrl + "users", HttpMethod.GET, makeAuthEntity(), User.class).getBody();
-    	
-    }
-    
-    
-    
-    
-    
+	
+	  public User[] getUsers(){ 
+		User[] listOfUsers = null;
+		 
+		listOfUsers = restTemplate.exchange(baseUrl + "users", HttpMethod.GET, makeAuthEntity(), User[].class).getBody(); 
+	  
+  		for(User i : listOfUsers) {
+		System.out.println(i.getId() + " " + i.getUsername());
+
+  		}
+  		return listOfUsers;
+	  }
+	  
+	  
+	  
+	 
     
     
     private HttpEntity makeAuthEntity() {

@@ -5,10 +5,14 @@ import com.techelevator.tenmo.model.Account;
 public interface AccountDAO {
 	
 	double getBalance(int userId);
-	double addToBalance();
-	double subtractFromBalance();
+	
+	void subtractFromBalance(int userId, double amount);
+	
 	Account searchByUserId(int userId);
+	
 	Account searchByAccountId(int accountId);
+	
+	void addToBalance(int userId, double amount);
 	
 
 }

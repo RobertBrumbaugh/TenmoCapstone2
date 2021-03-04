@@ -10,7 +10,6 @@ import com.techelevator.tenmo.dao.AccountDAO;
 import com.techelevator.tenmo.dao.UserDAO;
 
 @RestController
-@PreAuthorize("isAuthenticated()")
 public class AccountController {
 	
 
@@ -21,10 +20,12 @@ public class AccountController {
 		this.accountDAO = accountDAO;
 	}
 
-	@PreAuthorize("permitAll")
 	@RequestMapping(path = "accounts/{userId}/balance", method = RequestMethod.GET)
 	public Double getBalance(@PathVariable int userId) {
 		Double balance = accountDAO.getBalance(userId);
 		return balance;
 	}
+	
+
+	
 }

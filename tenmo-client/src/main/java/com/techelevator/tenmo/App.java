@@ -96,10 +96,11 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void sendBucks() {
-	//	UserService userservice = new userservice(baseurl, currentuser;)
-		// userservice.sendbucks();
-		
 		transferService.getUsers();
+		console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
+		console.getUserInputInteger("Enter amount");
+		System.out.println("all done");
+		
 		
 	}
 
