@@ -9,13 +9,13 @@ public class Transfers {
 	private int accountTo;
 	private double amount;
 	
-	public Transfers(int transferId, int transferTypeId, int transferStatusId, int accountFrom, int accountTo, double amount) {
-		this.transferId = transferId;
-		this.transferTypeId = transferTypeId;
-		this.transferStatusId = transferStatusId;
-		this.accountFrom = accountFrom;
-		this.accountTo = accountTo;
-		this.amount = amount;
+	public Transfers() {
+//		this.transferId = transferId;
+//		this.transferTypeId = transferTypeId;
+//		this.transferStatusId = transferStatusId;
+//		this.accountFrom = accountFrom;
+//		this.accountTo = accountTo;
+//		this.amount = amount;
 	}
 	
 	public int getTransferId() {

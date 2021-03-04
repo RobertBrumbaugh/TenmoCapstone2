@@ -29,10 +29,6 @@ public class JdbcAccountDAO implements AccountDAO {
 	
 	}
 	
-//	@Override
-//	public double getBalance(int userId) {
-//		String sql = 
-//	}
 
 	@Override
 	public double addToBalance() {
