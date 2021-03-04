@@ -22,7 +22,7 @@ public class AccountController {
 	}
 
 	@PreAuthorize("permitAll")
-	@RequestMapping(path = "/accounts/{id}/balance", method = RequestMethod.GET)
+	@RequestMapping(path = "accounts/{id}/balance", method = RequestMethod.GET)
 	public Double getBalance(@PathVariable int id) {
 		Double balance = accountDAO.getBalance(id);
 		return balance;

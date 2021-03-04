@@ -23,7 +23,7 @@ public class AccountService {
    public double getBalance(int userId) {
 	   double balance = 0.0;
 	   try {
-		   balance = restTemplate.exchange(baseUrl + "/accounts/"+ userId +"/balace", HttpMethod.GET, makeAuthEntity(), Double.class).getBody();
+		   balance = restTemplate.exchange(baseUrl + "accounts/"+ userId +"/balance", HttpMethod.GET, makeAuthEntity(), Double.class).getBody();
 	   }catch(RestClientResponseException ex) {
 		   System.out.println("Error");
 	   }
