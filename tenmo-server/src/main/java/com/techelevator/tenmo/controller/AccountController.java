@@ -22,9 +22,9 @@ public class AccountController {
 	}
 
 	@PreAuthorize("permitAll")
-	@RequestMapping(path = "accounts/{id}/balance", method = RequestMethod.GET)
-	public Double getBalance(@PathVariable int id) {
-		Double balance = accountDAO.getBalance(id);
+	@RequestMapping(path = "accounts/{userId}/balance", method = RequestMethod.GET)
+	public Double getBalance(@PathVariable int userId) {
+		Double balance = accountDAO.getBalance(userId);
 		return balance;
 	}
 }
