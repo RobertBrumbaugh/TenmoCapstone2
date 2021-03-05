@@ -10,5 +10,5 @@ public interface TransferDAO {
 	
 	Transfers getTransfersById(int transferId);
 	
-	int sendTransfer (int transferTypeId, int transferStatusId, int accountFrom, int accountTo, double amount );
+	Integer sendTransfer (int transferTypeId, int transferStatusId, int accountFrom, int accountTo, double amount );
 }

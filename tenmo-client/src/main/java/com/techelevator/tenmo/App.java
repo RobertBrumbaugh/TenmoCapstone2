@@ -1,5 +1,8 @@
 package com.techelevator.tenmo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.techelevator.tenmo.models.Account;
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Transfer;
@@ -99,35 +102,58 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void sendBucks() {
 		User[] listOfUsers = transferService.getUsers();
+		List<User> newList = new ArrayList<>();
+		
 		currentUser.getUser().getId();
+		
+		System.out.println("-------------------------------------------");
+			System.out.println("Users\nID            Name");
+			System.out.println("-------------------------------------------");
+		
 		
   		for(User i : listOfUsers) {
   			if(!currentUser.getUser().getId().equals(i.getId())) {
-  				System.out.println(i.getId() + " " + i.getUsername());
+  				newList.add(i);
+  				System.out.println(i.getId() + "          " + i.getUsername());
   			}
   		}
+  		
 		int accountToId = console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
-		double amountToSend = console.getUserInputInteger("Enter Amount to Send");
 		
-		Transfer transfer = new Transfer();
-		transfer.setAmount(amountToSend);
-		transfer.setAccountFrom(currentUser.getUser().getId());
-		transfer.setAccountTo(accountToId);
-		transfer.setTransferStatusId(2);
-		transfer.setTransferTypeId(2);
+//		if(newList.contains(accountToId) == false) {
+//			System.out.println("ID Does Not Exist!");
+//			mainMenu();
+//		}
+
 		
-		transferService.createTransfer(transfer);
-		accountService.addToBalance(accountToId, amountToSend);
-		accountService.subtractFromBalance(currentUser.getUser().getId(), amountToSend);
-		
-	}
+		if(accountToId == 0) {
+			mainMenu();
+		}
+
+	//	else {
+			double amountToSend = console.getUserInputInteger("Enter Amount to Send");
+			if(amountToSend > accountService.getBalance(currentUser.getUser().getId())){
+				System.out.println("Not Enough Funds!");
+				mainMenu();
+			}
+			if(amountToSend > 0) {
+				Transfer transfer = new Transfer();
+				transfer.setAmount(amountToSend);
+				transfer.setAccountFrom(currentUser.getUser().getId());
+				transfer.setAccountTo(accountToId);
+				transfer.setTransferStatusId(2);
+				transfer.setTransferTypeId(2);
+
+				transferService.createTransfer(transfer);
+				accountService.addToBalance(accountToId, amountToSend);
+				accountService.subtractFromBalance(currentUser.getUser().getId(), amountToSend);
+			}
+		}
+	
 	
 
 	private void requestBucks() {
 		// extra
-//		UserService userservice = new userservice(baseurl, currentuser;)
-			// userservice.sendbucks();
-		
 	}
 	
 	private void exitProgram() {
