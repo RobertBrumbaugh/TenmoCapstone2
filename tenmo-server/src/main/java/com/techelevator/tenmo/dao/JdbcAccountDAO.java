@@ -31,15 +31,17 @@ public class JdbcAccountDAO implements AccountDAO {
 	
 
 	@Override
-	public void addToBalance(int userId, double amount) {
+	public Double addToBalance(int userId, double amount) {
 		String sql = "UPDATE accounts SET balance = (balance + amount = ?) WHERE user_id = ?";
-		jdbcTemplate.update(sql, amount, userId);
+		double balance = jdbcTemplate.update(sql, amount, userId);
+		return balance;
 	}
 
 	@Override
-	public void subtractFromBalance(int userId, double amount) {
+	public Double subtractFromBalance(int userId, double amount) {
 		String sql = "UPDATE accounts SET balance = (balance - amount = ?) WHERE user_id = ?";
-		jdbcTemplate.update(sql, amount, userId);
+		double balance = jdbcTemplate.update(sql, amount, userId);
+		return balance;
 	}
 
 	@Override

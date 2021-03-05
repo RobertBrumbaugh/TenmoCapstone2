@@ -97,12 +97,18 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void sendBucks() {
 		transferService.getUsers();
-		console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
-		console.getUserInputInteger("Enter amount");
+		int accountToId = console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
+		double amountToSend = console.getUserInputInteger("Enter Amount to Send");
+	//	transferService.sendBucks(accountToId);
+		accountService.addToBalance(accountToId, amountToSend);
+		accountService.subtractFromBalance(currentUser.getUser().getId(), amountToSend);
+//		System.out.println(accountToId);
+	//	System.out.println(amountToSend);
 		System.out.println("all done");
 		
 		
 	}
+	
 
 	private void requestBucks() {
 		// extra
