@@ -30,14 +30,15 @@ public class AccountService {
    
    public double addToBalance(int userId, double amount) {
 	   double balance = 0.00;
-	   return balance = restTemplate.exchange(baseUrl + "accounts/"+ userId +"/updatebalance", HttpMethod.PUT, makeAuthEntity(), Double.class).getBody();
+	   return balance = restTemplate.exchange(baseUrl + "accounts/"+ userId +"/updatebalance", HttpMethod.PUT, makeNewAuthEntity(amount), Double.class).getBody();
    }
    
-   public double subtractFromBalance(int userId, double amount) {
-	   double balance = 0.00;
-	   // new account
-	  return balance = restTemplate.exchange(baseUrl + "accounts/"+ userId +"/newbalance", HttpMethod.PUT, makeNewAuthEntity(Account), Double.class).getBody();
-	 //  return balance = restTemplate.put(baseUrl + "accounts/"+ userId +"/newbalance", entity);
+  public double subtractFromBalance(int userId, double amount) {
+	  double balance = 0.00;
+	  return balance = restTemplate.exchange(baseUrl + "accounts/"+ userId +"/newbalance", HttpMethod.PUT, makeNewAuthEntity(amount), Double.class).getBody();
+
+  }
+
    
    private HttpEntity makeAuthEntity() {
 	    HttpHeaders headers = new HttpHeaders();
@@ -46,11 +47,11 @@ public class AccountService {
 	    return entity;
 	  }
    
-   private HttpEntity<Account> makeNewAuthEntity(Account account) {
+   private HttpEntity<Double> makeNewAuthEntity(Double amount) {
 	   HttpHeaders headers = new HttpHeaders();
 	   headers.setContentType(MediaType.APPLICATION_JSON);
 	   headers.setBearerAuth(AUTH_TOKEN);
-	   HttpEntity<Account> entity = new HttpEntity<>(account, headers);
+	   HttpEntity<Double> entity = new HttpEntity<>(amount, headers);
 	   return entity;
    }
 	

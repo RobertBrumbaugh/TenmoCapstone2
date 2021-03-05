@@ -5,10 +5,12 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.techelevator.tenmo.dao.TransferDAO;
@@ -47,11 +49,12 @@ public class TransferController {
 		transfer = transferDAO.getTransfersById(transferId);
 		return transfer;
 	}
-	
-	@RequestMapping(path = "transfers/{accountTo}", method = RequestMethod.POST)
-	public String sendTransfer(int accountFrom, @PathVariable int accountTo, @Valid @RequestBody double amount) {
-		String transfer = transferDAO.sendTransfer(accountFrom, accountTo, amount);
-		return transfer;
+	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(path = "transfers", method = RequestMethod.POST)
+	public int sendTransfer(@RequestBody Transfers transfer) {
+		int transferId = transferDAO.sendTransfer(transfer.getTransferTypeId(), transfer.getTransferStatusId(), 
+				transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
+		return transferId;
 	}
 
 }

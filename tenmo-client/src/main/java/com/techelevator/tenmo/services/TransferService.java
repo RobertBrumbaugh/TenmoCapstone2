@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
 import com.techelevator.tenmo.models.AuthenticatedUser;
@@ -25,41 +26,14 @@ public class TransferService {
     
 	
 	  public User[] getUsers(){ 
-		User[] listOfUsers = null;
-		 
-		listOfUsers = restTemplate.exchange(baseUrl + "users", HttpMethod.GET, makeAuthEntity(), User[].class).getBody(); 
-	  
-  		for(User i : listOfUsers) {
-		System.out.println(i.getId() + " " + i.getUsername());
-
-  		}
+		User[] listOfUsers = restTemplate.exchange(baseUrl + "users", HttpMethod.GET, makeAuthEntity(), User[].class).getBody(); 
   		return listOfUsers;
 	  }
 	  
 	  
-	  public void sendBucks(int accountToId) {
-		  User[] user = null;
-		  
-		  user = restTemplate.exchange(baseUrl + "transfers/" + accountToId, HttpMethod.GET, makeAuthEntity(), User[].class).getBody();
-		  
-		  
-		  
-		  
+	  public void createTransfer(Transfer transfer) {
+		  restTemplate.exchange(baseUrl + "transfers", HttpMethod.POST, makeNewAuthEntity(transfer), Transfer.class);  
 	  }
-	  
-//	  public Transfer[] listOfTransfers() {
-//	  Transfer listOfTransfers = null;
-//	  
-//	  listOfTransfers = restTemplate.exchange(baseUrl + "" + authenticatedUser.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Transfer.class).getBody();
-//	
-//	return null;
-//	  
-//  }
-	  
-	  
-	  
-	  
-	 
     
     
     private HttpEntity makeAuthEntity() {
@@ -69,6 +43,13 @@ public class TransferService {
 	    return entity;
 	  }
     
+    private HttpEntity<Transfer> makeNewAuthEntity(Transfer transfer) {
+ 	   HttpHeaders headers = new HttpHeaders();
+ 	   headers.setContentType(MediaType.APPLICATION_JSON);
+ 	   headers.setBearerAuth(AUTH_TOKEN);
+ 	   HttpEntity<Transfer> entity = new HttpEntity<>(transfer, headers);
+ 	   return entity;
+    }
     
 
 }

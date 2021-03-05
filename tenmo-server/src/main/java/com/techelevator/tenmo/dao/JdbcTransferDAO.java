@@ -44,15 +44,14 @@ public class JdbcTransferDAO implements TransferDAO {
 	}
 
 	@Override
-	public String sendTransfer(int accountFrom, int accountTo, double amount) {
+	public int sendTransfer(int transferTypeId, int transferStatusId, int accountFrom, int accountTo, double amount) {
 		
-		String sql = "INSERT INTO transfers (account_from, account_to, amount) VALUES (?, ?, ?) ";
-		jdbcTemplate.update(sql, accountFrom, accountTo, amount);
+		String sql = "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount) "
+				+ "VALUES (?, ?, ?, ?, ?) RETURNING transfer_id";
 		
-		jdbcAccountDAO.addToBalance(accountTo, amount);
-		jdbcAccountDAO.subtractFromBalance(accountFrom, amount);
+		int transferId = jdbcTemplate.queryForObject(sql, Integer.class, transferTypeId, transferStatusId, accountFrom, accountTo, amount);
 		
-		return "successful";
+		return transferId;
 	}
     
 

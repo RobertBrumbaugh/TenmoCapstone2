@@ -31,13 +31,13 @@ public class AccountController {
 	}
 	
 	@RequestMapping(path = "accounts/{userId}/updatebalance", method = RequestMethod.PUT)
-	public Double addToBalance(@PathVariable int userId, @Valid @RequestBody double amount) {
+	public Double addToBalance(@PathVariable int userId, @RequestBody double amount) {
 		Double balance = accountDAO.addToBalance(userId, amount);
 		return balance;
 	}
 	
 	@RequestMapping(path = "accounts/{userId}/newbalance", method = RequestMethod.PUT)
-	public Double subtractFromBalance(@PathVariable int userId, @Valid @RequestBody double amount) {
+	public Double subtractFromBalance(@PathVariable int userId, @RequestBody double amount) {
 		Double balance = accountDAO.subtractFromBalance(userId, amount);
 		return balance;
 	}

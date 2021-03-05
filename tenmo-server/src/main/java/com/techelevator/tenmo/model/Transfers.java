@@ -9,15 +9,6 @@ public class Transfers {
 	private int accountTo;
 	private double amount;
 	
-	public Transfers() {
-//		this.transferId = transferId;
-//		this.transferTypeId = transferTypeId;
-//		this.transferStatusId = transferStatusId;
-//		this.accountFrom = accountFrom;
-//		this.accountTo = accountTo;
-//		this.amount = amount;
-	}
-	
 	public int getTransferId() {
 		return transferId;
 	}

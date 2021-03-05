@@ -10,5 +10,5 @@ public interface TransferDAO {
 	
 	Transfers getTransfersById(int transferId);
 	
-	String sendTransfer (int accountFrom, int accountTo, double amount );
+	int sendTransfer (int transferTypeId, int transferStatusId, int accountFrom, int accountTo, double amount );
 }
