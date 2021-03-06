@@ -38,7 +38,7 @@ public class AccountService {
 
   }
   
-  public int getAccountByUserId(int accountId) {
+  public int getAccountIdByUserId(int accountId) {
 	  int accountByUserId = restTemplate.exchange(baseUrl + "accounts/" + accountId, HttpMethod.GET, makeAuthEntity(), Integer.class).getBody();
 	  return accountByUserId;
   }

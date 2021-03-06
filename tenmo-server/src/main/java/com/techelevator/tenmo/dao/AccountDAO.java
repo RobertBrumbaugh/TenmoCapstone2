@@ -8,9 +8,9 @@ public interface AccountDAO {
 	
 	Double subtractFromBalance(int userId, double amount);
 	
-	int getAccountByUserId(int userId);
+	int getAccountIdByUserId(int userId);
 	
-	int searchByAccountId(int accountId);
+	int getUserIdByAccountId(int accountId);
 	
 	Double addToBalance(int userId, double amount);
 	

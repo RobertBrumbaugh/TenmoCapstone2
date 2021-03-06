@@ -45,7 +45,7 @@ public class JdbcAccountDAO implements AccountDAO {
 	}
 
 	@Override
-	public int getAccountByUserId(int userId) {
+	public int getAccountIdByUserId(int userId) {
 		String sql = "SELECT account_id FROM accounts Where user_id = ?";
 		
 			int results = jdbcTemplate.queryForObject(sql, Integer.class, userId);
@@ -53,7 +53,7 @@ public class JdbcAccountDAO implements AccountDAO {
 	}
 
 	@Override
-	public int searchByAccountId(int accountId) {
+	public int getUserIdByAccountId(int accountId) {
 		String sql = "SELECT user_id FROM accounts WHERE account_id = ?";
 		
 			int results = jdbcTemplate.queryForObject(sql, Integer.class, accountId);

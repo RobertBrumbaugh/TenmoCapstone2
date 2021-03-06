@@ -100,14 +100,15 @@ public class App {
 
 		for (Transfer i : listOfTransfers) {
 			newTransferList.add(i);
-			if (i.getAccountTo() == accountService.getAccountByUserId(currentUser.getUser().getId())) {
+			if (i.getAccountTo() == accountService.getAccountIdByUserId(currentUser.getUser().getId())) {
 			System.out.println(i.getTransferId() + "\t\tFrom: " +  transferService.findByAccountId(i.getAccountFrom()) + "\t\t$" + String.format("%.2f", i.getAmount()));
 			} 
 			
-			if (i.getAccountFrom() == accountService.getAccountByUserId(currentUser.getUser().getId())) {				
+			if (i.getAccountFrom() == accountService.getAccountIdByUserId(currentUser.getUser().getId())) {				
 			System.out.println(i.getTransferId() + "\t\tTo: " +  transferService.findByAccountId(i.getAccountTo()) + "\t\t$" + String.format("%.2f", i.getAmount()));
 			}
 		}
+		
 		int newTransferId = console.getUserInputInteger("Please enter transfer ID to view details (0 to cancel)");
 		
 		boolean validTransferId = false;
@@ -119,6 +120,7 @@ public class App {
 			System.out.println("Not a valid transfer ID");
 			mainMenu();
 		}
+		
 		Transfer[] transferDetails = transferService.getTransferById(newTransferId);
 		for(Transfer i : transferDetails) {
 		
@@ -128,8 +130,8 @@ public class App {
 		System.out.println("Id: " + i.getTransferId());
 		System.out.println("From: " + transferService.findByAccountId(i.getAccountFrom()));
 		System.out.println("To: " + transferService.findByAccountId(i.getAccountTo()));
-		System.out.println("Type: " + i.getTransferTypeId());
-		System.out.println("Status: " + i.getTransferStatusId());
+		System.out.println("Type: " + transferService.getDescByTypeId(i.getTransferTypeId()));
+		System.out.println("Status: " + transferService.getDescByStatusId(i.getTransferStatusId()));
 		System.out.println("Amount: $" + String.format("%.2f", i.getAmount()));
 		}
 	}
@@ -172,7 +174,8 @@ public class App {
 			mainMenu();
 		}
 
-		double amountToSend = console.getUserInputInteger("Enter Amount to Send");
+		String amountToSendAsString = console.getUserInput("Enter Amount to Send");
+		double amountToSend = Double.parseDouble(amountToSendAsString);
 
 		if(amountToSend > accountService.getBalance(currentUser.getUser().getId())){
 			System.out.println("Not Enough Funds!");
@@ -181,8 +184,8 @@ public class App {
 		if(amountToSend > 0) {
 			Transfer transfer = new Transfer();
 			transfer.setAmount(amountToSend);
-			transfer.setAccountFrom(accountService.getAccountByUserId(currentUser.getUser().getId()));
-			transfer.setAccountTo(accountService.getAccountByUserId(accountToId));
+			transfer.setAccountFrom(accountService.getAccountIdByUserId(currentUser.getUser().getId()));
+			transfer.setAccountTo(accountService.getAccountIdByUserId(accountToId));
 			transfer.setTransferStatusId(2);
 			transfer.setTransferTypeId(2);
 

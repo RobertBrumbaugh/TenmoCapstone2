@@ -49,6 +49,16 @@ public class TransferService {
 		  Transfer[] transferById = restTemplate.exchange(baseUrl + "accounts/transfers/" + transferId, HttpMethod.GET, makeAuthEntity(), Transfer[].class).getBody();
 		  return transferById;
 	  }
+	  
+	  public String getDescByTypeId(int transferTypeId) {
+		  String descByTypeId = restTemplate.exchange(baseUrl + "transfers/type/" + transferTypeId, HttpMethod.GET, makeAuthEntity(), String.class).getBody();
+		  return descByTypeId;
+	  }
+	  
+	  public String getDescByStatusId(int transferStatusId) {
+		  String descByStatusId = restTemplate.exchange(baseUrl + "transfers/status/" + transferStatusId, HttpMethod.GET, makeAuthEntity(), String.class).getBody();
+		  return descByStatusId;
+	  }
     
     
     private HttpEntity makeAuthEntity() {

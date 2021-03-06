@@ -51,7 +51,7 @@ public class TransferController {
 	
 	@RequestMapping(path = "users/{accountId}", method = RequestMethod.GET)
 	public String findByAccountId(@PathVariable int accountId) {
-		String user = userDAO.findByAccountId(accountId);
+		String user = userDAO.findUsernameByAccountId(accountId);
 		return user;
 	}
 	
@@ -59,6 +59,16 @@ public class TransferController {
 	@RequestMapping(path = "transfers", method = RequestMethod.POST)
 	public void createTransfer(@RequestBody Transfer transfer) {
 		transferDAO.createTransfer(transfer);
+	}
+	
+	@RequestMapping(path = "transfers/type/{transferTypeId}", method = RequestMethod.GET)
+	public String getDescByTypeId(@PathVariable int transferTypeId) {
+		return transferDAO.getDescByTypeId(transferTypeId);
+	}
+	
+	@RequestMapping(path = "transfers/status/{transferStatusId}", method = RequestMethod.GET)
+	public String getDescByStatusId(@PathVariable int transferStatusId){
+		return transferDAO.getDescByStatusId(transferStatusId); 
 	}
 
 }

@@ -59,6 +59,18 @@ public class JdbcTransferDAO implements TransferDAO {
 		
 	}
     
+	@Override
+	public String getDescByTypeId(int transferTypeId) {
+		String sql = "SELECT transfer_type_desc FROM transfer_types WHERE transfer_type_id = ?";
+		return jdbcTemplate.queryForObject(sql, String.class, transferTypeId);
+	}
+
+	@Override
+	public String getDescByStatusId(int transferStatusId) {
+		String sql = "SELECT transfer_status_desc FROM transfer_statuses WHERE transfer_status_id = ?";
+		return jdbcTemplate.queryForObject(sql, String.class, transferStatusId);
+	}
+	
 
 	 private Transfer mapRowToTransfer(SqlRowSet results) {
 	        Transfer transfer = new Transfer();
@@ -70,6 +82,7 @@ public class JdbcTransferDAO implements TransferDAO {
 	        transfer.setAmount(results.getDouble("amount"));
 	        return transfer;
 	    }
-	
+
+
 
 }
