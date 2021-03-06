@@ -45,15 +45,21 @@ public class JdbcAccountDAO implements AccountDAO {
 	}
 
 	@Override
-	public Account searchByUserId(int userId) {
-		// TODO Auto-generated method stub
-		return null;
+	public int getAccountByUserId(int userId) {
+		String sql = "SELECT account_id FROM accounts Where user_id = ?";
+		
+			int results = jdbcTemplate.queryForObject(sql, Integer.class, userId);
+			return results;
 	}
 
 	@Override
-	public Account searchByAccountId(int accountId) {
-		// TODO Auto-generated method stub
-		return null;
+	public int searchByAccountId(int accountId) {
+		String sql = "SELECT user_id FROM accounts WHERE account_id = ?";
+		
+			int results = jdbcTemplate.queryForObject(sql, Integer.class, accountId);
+			return results;
+			
 	}
+	
 
 }

@@ -38,7 +38,17 @@ public class AccountService {
 	  return balance = restTemplate.exchange(baseUrl + "accounts/"+ userId +"/newbalance", HttpMethod.PUT, makeNewAuthEntity(amount), Double.class).getBody();
 
   }
-
+  
+  public int getAccountByUserId(int accountId) {
+	  int accountByUserId = restTemplate.exchange(baseUrl + "accounts/" + accountId, HttpMethod.GET, makeAuthEntity(), Integer.class).getBody();
+	  return accountByUserId;
+  }
+  
+  public int getUserIdByAccountId(int userId) {
+	  int userIdByAccountId = restTemplate.exchange(baseUrl + "accounts/" + userId, HttpMethod.GET, makeAuthEntity(), Integer.class).getBody();
+	  return userIdByAccountId;
+  }
+  
    
    private HttpEntity makeAuthEntity() {
 	    HttpHeaders headers = new HttpHeaders();

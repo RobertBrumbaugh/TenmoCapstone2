@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.techelevator.tenmo.dao.AccountDAO;
 import com.techelevator.tenmo.dao.UserDAO;
+import com.techelevator.tenmo.model.Account;
 
 @RestController
 public class AccountController {
@@ -42,6 +43,14 @@ public class AccountController {
 		return balance;
 	}
 	
+	@RequestMapping(path = "accounts/{userId}", method = RequestMethod.GET)
+		public int findAccountByUserId(@PathVariable int userId) {
+		int accountId = accountDAO.getAccountByUserId(userId);
+			return accountId;
+			
+		}
+	}
+	
 
 	
-}
+

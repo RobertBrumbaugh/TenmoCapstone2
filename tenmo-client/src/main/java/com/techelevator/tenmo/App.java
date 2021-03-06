@@ -90,7 +90,7 @@ public class App {
 	}
 
 	private void viewTransferHistory() {
-		Transfer[] listOfTransfers = transferService.getAllTransfers(currentUser.getUser().getId());
+		Transfer[] listOfTransfers = transferService.getTransfers(currentUser.getUser().getId());
 
 		System.out.println("-------------------------------------------");
 		System.out.println("Transfers\nID            From/To            Amount");
@@ -152,14 +152,16 @@ public class App {
 		if(amountToSend > 0) {
 			Transfer transfer = new Transfer();
 			transfer.setAmount(amountToSend);
-			transfer.setAccountFrom(2004);
-			transfer.setAccountTo(2001);
+			transfer.setAccountFrom(accountService.getAccountByUserId(currentUser.getUser().getId()));
+			transfer.setAccountTo(accountService.getAccountByUserId(accountToId));
 			transfer.setTransferStatusId(2);
 			transfer.setTransferTypeId(2);
 
 			transferService.createTransfer(transfer);
 			accountService.addToBalance(accountToId, amountToSend);
 			accountService.subtractFromBalance(currentUser.getUser().getId(), amountToSend);
+			System.out.println("You have sent: $" + String.format("%.2f", amountToSend));
+		
 		}
 	}
 

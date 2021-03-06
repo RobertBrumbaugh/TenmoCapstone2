@@ -37,7 +37,7 @@ public class TransferController {
 	}
 	
 	@RequestMapping(path = "accounts/{userId}/transfers", method = RequestMethod.GET)
-	public List<Transfer> getAllTransfers(@PathVariable int userId){
+	public List<Transfer> getTransfers(@PathVariable int userId){
 		List<Transfer> results = new ArrayList<>();
 		results = transferDAO.getTransfers(userId);
 		return results;
