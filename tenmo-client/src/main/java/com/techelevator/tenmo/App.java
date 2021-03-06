@@ -16,10 +16,10 @@ import com.techelevator.view.ConsoleService;
 
 public class App {
 
-private static final String API_BASE_URL = "http://localhost:8080/";
-    
-    private static final String MENU_OPTION_EXIT = "Exit";
-    private static final String LOGIN_MENU_OPTION_REGISTER = "Register";
+	private static final String API_BASE_URL = "http://localhost:8080/";
+
+	private static final String MENU_OPTION_EXIT = "Exit";
+	private static final String LOGIN_MENU_OPTION_REGISTER = "Register";
 	private static final String LOGIN_MENU_OPTION_LOGIN = "Login";
 	private static final String[] LOGIN_MENU_OPTIONS = { LOGIN_MENU_OPTION_REGISTER, LOGIN_MENU_OPTION_LOGIN, MENU_OPTION_EXIT };
 	private static final String MAIN_MENU_OPTION_VIEW_BALANCE = "View your current balance";
@@ -29,19 +29,19 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private static final String MAIN_MENU_OPTION_VIEW_PENDING_REQUESTS = "View your pending requests";
 	private static final String MAIN_MENU_OPTION_LOGIN = "Login as different user";
 	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_VIEW_BALANCE, MAIN_MENU_OPTION_SEND_BUCKS, MAIN_MENU_OPTION_VIEW_PAST_TRANSFERS, MAIN_MENU_OPTION_REQUEST_BUCKS, MAIN_MENU_OPTION_VIEW_PENDING_REQUESTS, MAIN_MENU_OPTION_LOGIN, MENU_OPTION_EXIT };
-	
-    private AuthenticatedUser currentUser;
-    private ConsoleService console;
-    private AuthenticationService authenticationService;
-    private AccountService accountService;
-    private TransferService transferService;
 
-    public static void main(String[] args) {
-    	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL), new AccountService(API_BASE_URL), new TransferService(API_BASE_URL));
-    	app.run();
-    }
+	private AuthenticatedUser currentUser;
+	private ConsoleService console;
+	private AuthenticationService authenticationService;
+	private AccountService accountService;
+	private TransferService transferService;
 
-    public App(ConsoleService console, AuthenticationService authenticationService, AccountService accountService, TransferService transferService) {
+	public static void main(String[] args) {
+		App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL), new AccountService(API_BASE_URL), new TransferService(API_BASE_URL));
+		app.run();
+	}
+
+	public App(ConsoleService console, AuthenticationService authenticationService, AccountService accountService, TransferService transferService) {
 		this.console = console;
 		this.authenticationService = authenticationService;
 		this.accountService = accountService;
@@ -52,7 +52,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		System.out.println("*********************");
 		System.out.println("* Welcome to TEnmo! *");
 		System.out.println("*********************");
-		
+
 		registerAndLogin();
 		mainMenu();
 	}
@@ -82,80 +82,93 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private void viewCurrentBalance() {
 		try{
 			double balance = accountService.getBalance(currentUser.getUser().getId());
-			System.out.println("Your current account balance is: $" + balance);
+			System.out.println("Your current account balance is: $" + String.format("%.2f", balance));
 		}catch(NullPointerException npe){
 			System.out.println("error");
 		}
-		
+
 	}
 
 	private void viewTransferHistory() {
-	//	userservice userservice = new userservice()
-	//		userservice.transferlist()
-		
+		Transfer[] listOfTransfers = transferService.getAllTransfers(currentUser.getUser().getId());
+
+		System.out.println("-------------------------------------------");
+		System.out.println("Transfers\nID            From/To            Amount");
+		System.out.println("-------------------------------------------");
+
+
+		for (Transfer i : listOfTransfers) {
+			if (i.getTransferTypeId() == 1) {
+			System.out.println(i.getTransferId() + "\t\tFrom:" +  i.getAccountFrom() + "\t\t" + i.getAmount());
+			} else if (i.getTransferTypeId() == 2) {
+			System.out.println(i.getTransferId() + "\t\tTo:" +  i.getAccountTo() + "\t\t" + i.getAmount());
+			}
+		}
 	}
+
 
 	private void viewPendingRequests() {
 		// extra
-		
+
 	}
 
 	private void sendBucks() {
 		User[] listOfUsers = transferService.getUsers();
 		List<User> newList = new ArrayList<>();
-		
-		currentUser.getUser().getId();
-		
-		System.out.println("-------------------------------------------");
-			System.out.println("Users\nID            Name");
-			System.out.println("-------------------------------------------");
-		
-		
-  		for(User i : listOfUsers) {
-  			if(!currentUser.getUser().getId().equals(i.getId())) {
-  				newList.add(i);
-  				System.out.println(i.getId() + "          " + i.getUsername());
-  			}
-  		}
-  		
-		int accountToId = console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
-		
-//		if(newList.contains(accountToId) == false) {
-//			System.out.println("ID Does Not Exist!");
-//			mainMenu();
-//		}
 
-		
-		if(accountToId == 0) {
+		currentUser.getUser().getId();
+
+		System.out.println("-------------------------------------------");
+		System.out.println("Users\nID            Name");
+		System.out.println("-------------------------------------------");
+
+
+		for(User i : listOfUsers) {
+			if(!currentUser.getUser().getId().equals(i.getId())) {
+				newList.add(i);
+				System.out.println(i.getId() + "          " + i.getUsername());
+			}
+		}
+
+		int accountToId = console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
+
+		boolean validUserId = false;
+		for(User user : newList) {
+			if(user.getId().equals(accountToId)) {
+				validUserId = true;
+			}
+		}
+		while(!validUserId) {
+			System.out.println("Not a valid ID");
 			mainMenu();
 		}
 
-	//	else {
-			double amountToSend = console.getUserInputInteger("Enter Amount to Send");
-			if(amountToSend > accountService.getBalance(currentUser.getUser().getId())){
-				System.out.println("Not Enough Funds!");
-				mainMenu();
-			}
-			if(amountToSend > 0) {
-				Transfer transfer = new Transfer();
-				transfer.setAmount(amountToSend);
-				transfer.setAccountFrom(currentUser.getUser().getId());
-				transfer.setAccountTo(accountToId);
-				transfer.setTransferStatusId(2);
-				transfer.setTransferTypeId(2);
+		double amountToSend = console.getUserInputInteger("Enter Amount to Send");
 
-				transferService.createTransfer(transfer);
-				accountService.addToBalance(accountToId, amountToSend);
-				accountService.subtractFromBalance(currentUser.getUser().getId(), amountToSend);
-			}
+		if(amountToSend > accountService.getBalance(currentUser.getUser().getId())){
+			System.out.println("Not Enough Funds!");
+			mainMenu();
 		}
-	
-	
+		if(amountToSend > 0) {
+			Transfer transfer = new Transfer();
+			transfer.setAmount(amountToSend);
+			transfer.setAccountFrom(2004);
+			transfer.setAccountTo(2001);
+			transfer.setTransferStatusId(2);
+			transfer.setTransferTypeId(2);
+
+			transferService.createTransfer(transfer);
+			accountService.addToBalance(accountToId, amountToSend);
+			accountService.subtractFromBalance(currentUser.getUser().getId(), amountToSend);
+		}
+	}
+
+
 
 	private void requestBucks() {
 		// extra
 	}
-	
+
 	private void exitProgram() {
 		System.exit(0);
 	}
@@ -181,18 +194,18 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private void register() {
 		System.out.println("Please register a new user account");
 		boolean isRegistered = false;
-        while (!isRegistered) //will keep looping until user is registered
-        {
-            UserCredentials credentials = collectUserCredentials();
-            try {
-            	authenticationService.register(credentials);
-            	isRegistered = true;
-            	System.out.println("Registration successful. You can now login.");
-            } catch(AuthenticationServiceException e) {
-            	System.out.println("REGISTRATION ERROR: "+e.getMessage());
+		while (!isRegistered) //will keep looping until user is registered
+		{
+			UserCredentials credentials = collectUserCredentials();
+			try {
+				authenticationService.register(credentials);
+				isRegistered = true;
+				System.out.println("Registration successful. You can now login.");
+			} catch(AuthenticationServiceException e) {
+				System.out.println("REGISTRATION ERROR: "+e.getMessage());
 				System.out.println("Please attempt to register again.");
-            }
-        }
+			}
+		}
 	}
 
 	private void login() {
@@ -201,7 +214,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		while (currentUser == null) //will keep looping until user is logged in
 		{
 			UserCredentials credentials = collectUserCredentials();
-		    try {
+			try {
 				currentUser = authenticationService.login(credentials);
 			} catch (AuthenticationServiceException e) {
 				System.out.println("LOGIN ERROR: "+e.getMessage());
@@ -209,7 +222,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			}
 		}
 	}
-	
+
 	private UserCredentials collectUserCredentials() {
 		String username = console.getUserInput("Username");
 		String password = console.getUserInput("Password");

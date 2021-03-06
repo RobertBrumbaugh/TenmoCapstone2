@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
-import com.techelevator.tenmo.model.Transfers;
+import com.techelevator.tenmo.model.Transfer;
 
 @Component
 public class JdbcTransferDAO implements TransferDAO {
@@ -21,15 +21,15 @@ public class JdbcTransferDAO implements TransferDAO {
 	private JdbcAccountDAO jdbcAccountDAO;
 
 	@Override
-	public List<Transfers> getTransfers(int userId) {
-		List<Transfers> list = new ArrayList<>();
+	public List<Transfer> getTransfers(int userId) {
+		List<Transfer> list = new ArrayList<>();
 		String sql = "SELECT t.transfer_id, t.account_from, t.account_to, t.amount FROM transfers t " +
 				"JOIN accounts a ON a.account_id = t.account_from " +
 				"WHERE a.user_id = ?;";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
 		
 		while(results.next()) {
-			Transfers transfer = mapRowToTransfer(results);
+			Transfer transfer = mapRowToTransfer(results);
 			list.add(transfer);
 		}
 		return list;
@@ -37,26 +37,25 @@ public class JdbcTransferDAO implements TransferDAO {
 	}
 
 	@Override
-	public Transfers getTransfersById(int transferId) {
+	public Transfer getTransfersById(int transferId) {
 		String sql = "SELECT * FROM transfers t WHERE t.transfer_id = ?";
-		Transfers results = jdbcTemplate.queryForObject(sql, Transfers.class, transferId);
+		Transfer results = jdbcTemplate.queryForObject(sql, Transfer.class, transferId);
 		return results;
 	}
 
 	@Override
-	public Integer sendTransfer(int transferTypeId, int transferStatusId, int accountFrom, int accountTo, double amount) {
+	public void createTransfer(Transfer transfer) {
 		
 		String sql = "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount) "
-				+ "VALUES (?, ?, ?, ?, ?) RETURNING transfer_id";
+				+ "VALUES (?, ?, ?, ?, ?)";
 		
-		Integer transferId = jdbcTemplate.queryForObject(sql, Integer.class, transferTypeId, transferStatusId, accountFrom, accountTo, amount);
+		jdbcTemplate.update(sql, transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
 		
-		return transferId;
 	}
     
 
-	 private Transfers mapRowToTransfer(SqlRowSet results) {
-	        Transfers transfer = new Transfers();
+	 private Transfer mapRowToTransfer(SqlRowSet results) {
+	        Transfer transfer = new Transfer();
 	        transfer.setTransferId(results.getInt("transfer_id"));
 	        transfer.setTransferTypeId(results.getInt("transfer_type_id"));
 	        transfer.setTransferStatusId(results.getInt("transfer_status_id"));

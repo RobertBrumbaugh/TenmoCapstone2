@@ -2,13 +2,13 @@ package com.techelevator.tenmo.dao;
 
 import java.util.List;
 
-import com.techelevator.tenmo.model.Transfers;
+import com.techelevator.tenmo.model.Transfer;
 
 public interface TransferDAO {
 
-	List<Transfers> getTransfers(int userId);
+	List<Transfer> getTransfers(int userId);
 	
-	Transfers getTransfersById(int transferId);
+	Transfer getTransfersById(int transferId);
 	
-	Integer sendTransfer (int transferTypeId, int transferStatusId, int accountFrom, int accountTo, double amount );
+	void createTransfer (Transfer transfer);
 }

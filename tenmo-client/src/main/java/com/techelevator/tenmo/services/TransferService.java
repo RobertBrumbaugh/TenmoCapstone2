@@ -34,6 +34,11 @@ public class TransferService {
 	  public void createTransfer(Transfer transfer) {
 		  restTemplate.exchange(baseUrl + "transfers", HttpMethod.POST, makeNewAuthEntity(transfer), Transfer.class);  
 	  }
+	  
+	  public Transfer[] getAllTransfers(int userId) {
+		 Transfer[] listOfTransfers = restTemplate.exchange(baseUrl + "accounts/" + userId + "/transfers", HttpMethod.GET, makeAuthEntity(), Transfer[].class).getBody();
+		 return listOfTransfers;
+	  }
     
     
     private HttpEntity makeAuthEntity() {

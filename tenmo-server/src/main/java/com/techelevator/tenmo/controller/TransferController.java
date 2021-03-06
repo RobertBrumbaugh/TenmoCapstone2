@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.techelevator.tenmo.dao.TransferDAO;
 import com.techelevator.tenmo.dao.UserDAO;
-import com.techelevator.tenmo.model.Transfers;
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 
 @RestController
@@ -37,24 +37,23 @@ public class TransferController {
 	}
 	
 	@RequestMapping(path = "accounts/{userId}/transfers", method = RequestMethod.GET)
-	public List<Transfers> getAllTransfers(@PathVariable int userId){
-		List<Transfers> results = new ArrayList<>();
+	public List<Transfer> getAllTransfers(@PathVariable int userId){
+		List<Transfer> results = new ArrayList<>();
 		results = transferDAO.getTransfers(userId);
 		return results;
 	}
 	
 	@RequestMapping(path = "accounts/transfers/{transferId}", method = RequestMethod.GET)
-	public Transfers getTransferById(@PathVariable int transferId) {
-		Transfers transfer = new Transfers();
+	public Transfer getTransferById(@PathVariable int transferId) {
+		Transfer transfer = new Transfer();
 		transfer = transferDAO.getTransfersById(transferId);
 		return transfer;
 	}
+	
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(path = "transfers", method = RequestMethod.POST)
-	public int sendTransfer(@RequestBody Transfers transfer) {
-		int transferId = transferDAO.sendTransfer(transfer.getTransferTypeId(), transfer.getTransferStatusId(), 
-				transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
-		return transferId;
+	public void createTransfer(@RequestBody Transfer transfer) {
+		transferDAO.createTransfer(transfer);
 	}
 
 }
