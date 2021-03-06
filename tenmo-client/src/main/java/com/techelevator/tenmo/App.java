@@ -90,25 +90,54 @@ public class App {
 	}
 
 	private void viewTransferHistory() {
-		Transfer[] listOfTransfers = transferService.getTransfers(currentUser.getUser().getId());
+		Transfer[] listOfTransfers =transferService.getTransfers(currentUser.getUser().getId());
+		List<Transfer> newTransferList = new ArrayList<>();
 
-		System.out.println("-------------------------------------------");
-		System.out.println("Transfers\nID            From/To            Amount");
-		System.out.println("-------------------------------------------");
-
+		System.out.println("\n-------------------------------------------");
+		System.out.println("Transfers\nID\t\t From/To\t\t Amount");
+		System.out.println("-------------------------------------------\n");
+		
 
 		for (Transfer i : listOfTransfers) {
-			if (i.getTransferTypeId() == 1) {
-			System.out.println(i.getTransferId() + "\t\tFrom:" +  i.getAccountFrom() + "\t\t" + i.getAmount());
-			} else if (i.getTransferTypeId() == 2) {
-			System.out.println(i.getTransferId() + "\t\tTo:" +  i.getAccountTo() + "\t\t" + i.getAmount());
+			newTransferList.add(i);
+			if (i.getAccountTo() == accountService.getAccountByUserId(currentUser.getUser().getId())) {
+			System.out.println(i.getTransferId() + "\t\tFrom: " +  transferService.findByAccountId(i.getAccountFrom()) + "\t\t$" + String.format("%.2f", i.getAmount()));
+			} 
+			
+			if (i.getAccountFrom() == accountService.getAccountByUserId(currentUser.getUser().getId())) {				
+			System.out.println(i.getTransferId() + "\t\tTo: " +  transferService.findByAccountId(i.getAccountTo()) + "\t\t$" + String.format("%.2f", i.getAmount()));
 			}
+		}
+		int newTransferId = console.getUserInputInteger("Please enter transfer ID to view details (0 to cancel)");
+		
+		boolean validTransferId = false;
+		for(Transfer transfer : newTransferList) {
+			if(transfer.getTransferId() == newTransferId) {
+				validTransferId = true;
+			}
+		}while(!validTransferId) {
+			System.out.println("Not a valid transfer ID");
+			mainMenu();
+		}
+		Transfer[] transferDetails = transferService.getTransferById(newTransferId);
+		for(Transfer i : transferDetails) {
+		
+		System.out.println("\n-------------------------------------------");
+		System.out.println("Transfers Details");
+		System.out.println("-------------------------------------------\n");
+		System.out.println("Id: " + i.getTransferId());
+		System.out.println("From: " + transferService.findByAccountId(i.getAccountFrom()));
+		System.out.println("To: " + transferService.findByAccountId(i.getAccountTo()));
+		System.out.println("Type: " + i.getTransferTypeId());
+		System.out.println("Status: " + i.getTransferStatusId());
+		System.out.println("Amount: $" + String.format("%.2f", i.getAmount()));
 		}
 	}
 
 
 	private void viewPendingRequests() {
-		// extra
+		System.out.println("No pending requests");
+		mainMenu();
 
 	}
 
@@ -118,15 +147,15 @@ public class App {
 
 		currentUser.getUser().getId();
 
-		System.out.println("-------------------------------------------");
-		System.out.println("Users\nID            Name");
-		System.out.println("-------------------------------------------");
+		System.out.println("\n-------------------------------------------");
+		System.out.println("Users\nID\t\t Name");
+		System.out.println("-------------------------------------------\n");
 
 
 		for(User i : listOfUsers) {
 			if(!currentUser.getUser().getId().equals(i.getId())) {
 				newList.add(i);
-				System.out.println(i.getId() + "          " + i.getUsername());
+				System.out.println(i.getId() + "\t\t " + i.getUsername());
 			}
 		}
 
@@ -168,7 +197,8 @@ public class App {
 
 
 	private void requestBucks() {
-		// extra
+		System.out.println("Not available at this time");
+		mainMenu();
 	}
 
 	private void exitProgram() {

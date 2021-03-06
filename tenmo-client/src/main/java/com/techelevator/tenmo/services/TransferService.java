@@ -36,8 +36,18 @@ public class TransferService {
 	  }
 	  
 	  public Transfer[] getTransfers(int userId) {
-		 Transfer[] listOfTransfers = restTemplate.exchange(baseUrl + "accounts/" + userId + "/transfers", HttpMethod.GET, makeAuthEntity(), Transfer[].class).getBody();
+		 Transfer[] listOfTransfers = restTemplate.exchange(baseUrl + "transfers/" + userId, HttpMethod.GET, makeAuthEntity(), Transfer[].class).getBody();
 		 return listOfTransfers;
+	  }
+	  
+	  public String findByAccountId(int accountId) {
+		  String usernameByAccountId = restTemplate.exchange(baseUrl + "users/" + accountId, HttpMethod.GET, makeAuthEntity(), String.class).getBody();
+		  return usernameByAccountId;
+	  }
+	  
+	  public Transfer[] getTransferById(int transferId) {
+		  Transfer[] transferById = restTemplate.exchange(baseUrl + "accounts/transfers/" + transferId, HttpMethod.GET, makeAuthEntity(), Transfer[].class).getBody();
+		  return transferById;
 	  }
     
     

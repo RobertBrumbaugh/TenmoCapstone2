@@ -24,7 +24,6 @@ public class AccountService {
    public double getBalance(int userId) {
 	   	double balance = 0.00;
 		 balance = restTemplate.exchange(baseUrl + "accounts/"+ userId +"/balance", HttpMethod.GET, makeAuthEntity(), Double.class).getBody();
-
 	   return balance;
    }
    

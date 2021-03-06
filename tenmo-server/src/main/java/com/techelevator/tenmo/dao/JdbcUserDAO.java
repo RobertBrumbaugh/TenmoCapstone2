@@ -81,6 +81,13 @@ public class JdbcUserDAO implements UserDAO {
 
         return true;
     }
+    
+	@Override
+	public String findByAccountId(int accountId) {
+		String sql = "SELECT username FROM users u JOIN accounts a ON a.user_id = u.user_id  WHERE a.account_id = ?;";
+		String username = jdbcTemplate.queryForObject(sql, String.class, accountId);
+		return username;
+	}
 
     private User mapRowToUser(SqlRowSet rs) {
         User user = new User();
@@ -91,4 +98,5 @@ public class JdbcUserDAO implements UserDAO {
         user.setAuthorities("USER");
         return user;
     }
+
 }

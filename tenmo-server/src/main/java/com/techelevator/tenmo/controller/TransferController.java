@@ -36,7 +36,7 @@ public class TransferController {
 		return listOfUsers;
 	}
 	
-	@RequestMapping(path = "accounts/{userId}/transfers", method = RequestMethod.GET)
+	@RequestMapping(path = "transfers/{userId}", method = RequestMethod.GET)
 	public List<Transfer> getTransfers(@PathVariable int userId){
 		List<Transfer> results = new ArrayList<>();
 		results = transferDAO.getTransfers(userId);
@@ -44,10 +44,15 @@ public class TransferController {
 	}
 	
 	@RequestMapping(path = "accounts/transfers/{transferId}", method = RequestMethod.GET)
-	public Transfer getTransferById(@PathVariable int transferId) {
-		Transfer transfer = new Transfer();
-		transfer = transferDAO.getTransfersById(transferId);
+	public List<Transfer> getTransferById(@PathVariable int transferId) {
+		List<Transfer> transfer = transferDAO.getTransfersById(transferId);
 		return transfer;
+	}
+	
+	@RequestMapping(path = "users/{accountId}", method = RequestMethod.GET)
+	public String findByAccountId(@PathVariable int accountId) {
+		String user = userDAO.findByAccountId(accountId);
+		return user;
 	}
 	
 	@ResponseStatus(HttpStatus.CREATED)
